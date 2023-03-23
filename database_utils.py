@@ -2,6 +2,7 @@ import yaml
 import psycopg2
 from sqlalchemy import create_engine, text
 from sqlalchemy import inspect
+import numpy as np
 
 
 class DatabaseConnector:
@@ -30,8 +31,15 @@ class DatabaseConnector:
         inspector = inspect(engine)
         table_names = inspector.get_table_names()
 
-
         print(table_names)
+
+    # takes in a pandas dataframe and a table name and uploads that dataframe as a table to the database
+    def upload_to_db(self, df, table_name):
+        
+        engine = create_engine("postgresql+psycopg2://postgres:70Bahawalpur@localhost:5432/Sales_Data")
+        engine.connect()
+        df.to_sql(table_name, engine, if_exists='replace', index=False, index_label='index')
+
 
 
 
